@@ -78,7 +78,7 @@ function prepare_data()
 	extractor = deserialize(cachedir("extractor.jls"))
 
 	####
-	# export the trainig data
+	# export the training data
 	####
 	trn_targets = Folds.map(d -> d["label"], jsons);
 	class_indexes = classindexes(trn_targets);
