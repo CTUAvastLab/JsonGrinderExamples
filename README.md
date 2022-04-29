@@ -11,6 +11,8 @@ for tuned results, run
 julia --project=. tuned.jl
 ```
 
+Julia v1.7 was used in all experiments
+
 ## Mutagenesis
 Mutagenesis is a small dataset from biology, which describes molecules trialed for mutagenicity on
 *Salmonella typhimurium*. It is very small and contains only 100 training samples.
