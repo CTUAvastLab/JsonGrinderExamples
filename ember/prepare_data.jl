@@ -62,13 +62,14 @@ function prepare_data()
 	trn_jsons = reduce(vcat, trn_jsons);
 
 	trn_targets = Folds.map(d -> d["label"], trn_jsons);
-	trn_jsons = trn_jsons[targets .!= -1]
+	trn_jsons = trn_jsons[trn_targets .!= -1]
 
 	!isdir(cachedir()) && mkpath(cachedir())
 	if !isfile(cachedir("extractor.jls"))
 		sch = makeschema(trn_jsons);
 		ks = [:exports,:section,:general,:header,:histogram,:datadirectories,:byteentropy,:strings]
-		exs = map(k -> k => suggestextractor(sch[k], (scalar_extractors = extractor_rules(), key_as_field = 500)), ks)
+		# exs = map(k -> k => suggestextractor(sch[k], (scalar_extractors = extractor_rules(), key_as_field = 500)), ks)
+		exs = map(k -> k => suggestextractor(sch[k], (;key_as_field = 500)), ks)
 		push!(exs, :imports => ExtractKeyAsField(ExtractString(), ExtractArray(ExtractString())))
 		extractor = ExtractDict(Dict(exs))
 		serialize(cachedir("extractor.jls"), extractor)
@@ -80,12 +81,12 @@ function prepare_data()
 	####
 	# export the trainig data
 	####
-	trn_targets = Folds.map(d -> d["label"], jsons);
+	trn_targets = Folds.map(d -> d["label"], trn_jsons);
 	class_indexes = classindexes(trn_targets);
 	mbindices = map(x -> vcat(x...), zip(map(v -> Iterators.partition(shuffle(v), 100), values(class_indexes))...))
 	trn_dsy = Folds.map(mbindices) do ii
-		(ds = map(fixsample ∘ extractor, tst_jsons[ii]),
-		y = tst_targets[ii],
+		(ds = map(fixsample ∘ extractor, trn_jsons[ii]),
+		y = trn_targets[ii],
 		)
 	end
 	trn_x = reduce(vcat, [x[1] for x in trn_dsy])
