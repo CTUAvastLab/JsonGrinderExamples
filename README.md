@@ -1,4 +1,4 @@
-# JsonGrinderExamples.jl
+# JsonGrinderExamples
 
 This repo contains examples of use of the [JsonGrinder.jl](https://github.com/CTUAvastLab/JsonGrinder.jl) library from *JsonGrinder.jl: automated differentiable neural architecture for embedding arbitrary JSON data, Mandlík, Račinský, Lisý, and Tomáš Pevný, 2022*.
 
