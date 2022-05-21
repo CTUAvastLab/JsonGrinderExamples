@@ -6,10 +6,10 @@ using Serialization
 using FileIO
 using PrayTools
 using Downloads
-# using TranscodingStreams
-# using CodecBzip2
-# using Downloads
-# using Tar
+using TranscodingStreams
+using CodecBzip2
+using Downloads
+using Tar
 using Folds
 using Random
 const EMBER_URL = "https://ember.elastic.co/ember_dataset_2018_2.tar.bz2"

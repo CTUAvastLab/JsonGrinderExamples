@@ -21,3 +21,5 @@ Mutagenesis is a small dataset from biology, which describes molecules trialed f
 Ember is a problem from a computer security, where the goal is to classify samples to malware and clean. Data are available at (https://github.com/endgameinc/ember)[https://github.com/endgameinc/ember]. The problem is large, therefore the scripts are adapted to take advantage of multi-threadding  in the data preparation phase (hence run julia with `-t` option with correct number of threads). Because of this, scripts depart a bit from the usual examples. 
 
 **Warning: The ember dataset is large. By default, it will be downloaded to a temporary directory in `/tmp`. Make sure you have at least 10Gb of free space.**
+
+Executute `julia -t auto --project=. prepare_data.jl -e "prepare_data()"` to download the data and cache the result of extraction.
