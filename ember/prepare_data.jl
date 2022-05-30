@@ -92,7 +92,8 @@ function prepare_data()
 	if !isfile(jlsdir("extractor.jls"))
 		JsonGrinder.updatemaxkeys!(typemax(Int))
 		sch = makeschema(jsons);
-		ks = [:label,:exports,:section,:general,:header,:avclass,:histogram,:datadirectories,:byteentropy,:appeared,:sha256,:strings,:md5]
+		# ks = [:label,:exports,:section,:general,:header,:avclass,:histogram,:datadirectories,:byteentropy,:appeared,:sha256,:strings,:md5]
+		ks = [:exports,:section,:general,:header,:histogram,:datadirectories,:byteentropy,:strings]
 		exs = map(k -> k => suggestextractor(sch[k], (scalar_extractors = extractor_rules(), key_as_field = 500)), ks)
 		push!(exs, :imports => ExtractKeyAsField(ExtractString(), ExtractArray(ExtractString())))
 		extractor = ExtractDict(Dict(exs))
@@ -101,10 +102,10 @@ function prepare_data()
 	end
 
 	extractor = deserialize(jlsdir("extractor.jls"))
-	delete!(extractor.dict, :sha256);
-	delete!(extractor.dict, :md5);
-	delete!(extractor.dict, :label);
-	delete!(extractor.dict, :appeared);
+	# delete!(extractor.dict, :sha256);
+	# delete!(extractor.dict, :md5);
+	# delete!(extractor.dict, :label);
+	# delete!(extractor.dict, :appeared);
 
 	####
 	# export the trainig data
@@ -112,13 +113,11 @@ function prepare_data()
 	trn_targets = Folds.map(d -> d["label"], jsons);
 	class_indexes = classindexes(trn_targets);
 	mbindices = map(x -> vcat(x...), zip(map(v -> Iterators.partition(shuffle(v), 100), values(class_indexes))...))
-	Folds.map(enumerate(mbindices)) do iii
-		i, ii = iii
+	Threads.@threads for (i,ii) in collect(enumerate(mbindices))
 		data = map(extractor, jsons[ii]);
 		ds = reduce(catobs, data)
 		y = trn_targets[ii]
 		serialize(jlsdir("train_$(i).jls"), (ds, y))
-		nothing
 	end
 
 	####
@@ -127,13 +126,11 @@ function prepare_data()
 	tst_jsons = Folds.map(l -> JSON.parse(l), readlines(cachedir("test_features.jsonl")))
 	tst_targets = map(d -> d["label"], tst_jsons);
 	mbindices = Iterators.partition(1:length(tst_jsons), 100)
-	Folds.map(collect(enumerate(mbindices))) do iii
-		i, ii = iii
+	Threads.@threads for (i,ii) in collect(enumerate(mbindices))
 		data = map(extractor, tst_jsons[ii])
 		ds = reduce(catobs, data)
 		y = tst_targets[ii]
 		serialize(jlsdir("test_$(i).jls"), (ds, y))
-		nothing
 	end
 
 end
@@ -149,7 +146,7 @@ function fixsample(ds)
 end
 
 function loadsamples(files)
-	dsy = Folds.map(files) do f
+	dsy = map(files) do f
 		ds, y = deserialize(jlsdir(f))
 		dss = [fixsample(ds[i]) for i in 1:nobs(ds)]
 		dss, y
