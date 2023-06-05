@@ -24,7 +24,7 @@ opt = AdaBelief()
 ps = Flux.params(model)
 data_loader = Flux.Data.DataLoader((ds_train, y_train_smoothed), batchsize=BATCH_SIZE, shuffle=true)
 Flux.@epochs 20 begin
-    @show @time Flux.Optimise.train!(loss, ps, data_loader, opt)
+    Flux.Optimise.train!(loss, ps, data_loader, opt)
     @show accuracy(ds_train, y_train)
 end
 
