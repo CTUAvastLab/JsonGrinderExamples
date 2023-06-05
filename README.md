@@ -2,7 +2,7 @@
 
 This repo contains examples of use of the [JsonGrinder.jl](https://github.com/CTUAvastLab/JsonGrinder.jl) library from *JsonGrinder.jl: automated differentiable neural architecture for embedding arbitrary JSON data, Mandlík, Račinský, Lisý, and Tomáš Pevný, 2022*.
 
-Each directory contains the `Project.toml` and `Manifest.toml` for improved reproducibility. To make sure that all dependencies have same versions, run
+Julia v1.7.3 was used in all experiments. Each directory contains the `Project.toml` and `Manifest.toml` for reproducibility. To make sure that all dependencies have same versions, run
 ```
 julia --project=. -e "using Pkg; Pkg.instantiate()"
 ```
@@ -17,8 +17,6 @@ for tuned results, run
 ```
 julia --project=. tuned.jl
 ```
-
-Julia v1.7 was used in all experiments
 
 ## Mutagenesis
 Mutagenesis is a small dataset from biology, which describes molecules trialed for mutagenicity on
