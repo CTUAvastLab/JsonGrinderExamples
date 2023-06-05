@@ -2,7 +2,14 @@
 
 This repo contains examples of use of the [JsonGrinder.jl](https://github.com/CTUAvastLab/JsonGrinder.jl) library from *JsonGrinder.jl: automated differentiable neural architecture for embedding arbitrary JSON data, Mandlík, Račinský, Lisý, and Tomáš Pevný, 2022*.
 
-Each directory contains the `Project.toml` and `Manifest.toml` for improved reproducibility. To reproduce the results, it is sufficient to run in appropriate directory. For baseline results, run
+Each directory contains the `Project.toml` and `Manifest.toml` for improved reproducibility. To make sure that all dependencies have same versions, run
+```
+julia --project=. -e "using Pkg; Pkg.instantiate()"
+```
+
+in the directory.
+
+To reproduce the results, it is sufficient to run in appropriate directory. For baseline results, run
 ```
 julia --project=. baseline.jl
 ```
