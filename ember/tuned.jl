@@ -73,12 +73,12 @@ function accuracy(gb_model, x, y)
 end
 
 
-
 ((trn_x, trn_y), (tst_x, tst_y)) = load_cached_data();
 gbbl = GradientBoost.ML.GBBL(MillLearner();loss_function = LogisticLoss(), num_iterations = 5, learning_rate=1)
 gbl = GradientBoost.ML.GBLearner(gbbl, :class)
 gbl.model = GradientBoost.ML.fit(gbl.algorithm, trn_x, 2trn_y .- 1)
 
+tst_accuracy = accuracy(gbl.model, tst_x, tst_y)
+trn_accuracy = accuracy(gbl.model, trn_x, trn_y)
 
-accuracy(gbl.model, tst_x, tst_y)
-accuracy(gbl.model, trn_x, trn_y)
+@info "Results" trn_accuracy tst_accuracy

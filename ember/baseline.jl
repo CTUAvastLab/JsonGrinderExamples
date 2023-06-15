@@ -50,5 +50,7 @@ mb = () -> prepare_minibatch(trn_x, trn_y, 128)
 loss(x,y) =  logitcrossentropy(model(x), y)
 PrayTools.train!(loss, ps, mb, opt, 20000; cby)
 
-mean(predict(model, tst_x) .== tst_y)
-mean(predict(model, trn_x) .== trn_y)
+tst_accuracy = mean(predict(model, tst_x) .== tst_y)
+trn_accuracy = mean(predict(model, trn_x) .== trn_y)
+
+@info "Results" trn_accuracy tst_accuracy
